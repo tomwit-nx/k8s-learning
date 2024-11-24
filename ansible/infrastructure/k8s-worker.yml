@@ -1,0 +1,6 @@
+---
+- name: Bootstrap and join worker to k8s cluster
+  hosts: all
+  roles:
+    - k8s-common
+    - k8s-worker

@@ -1,0 +1,23 @@
+repos:
+  - repo: local
+    hooks:
+      # run shellcheck
+      - id: shellcheck
+        name: shellcheck
+        entry: bash -c "shopt -s globstar; shellcheck **/*.sh"
+        language: system
+        pass_filenames: false
+
+      # run shfmt
+      - id: shfmt
+        name: shfmt
+        entry: shfmt -i 4 -d -w .
+        language: system
+        pass_filenames: false
+
+      # run ansible-lint
+      - id: ansible-lint
+        name: ansible-lint
+        entry: ansible-lint --profile production --strict --fix
+        language: system
+        pass_filenames: false

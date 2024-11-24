@@ -1,0 +1,8 @@
+- name: Join k8s cluster as worker
+  ansible.builtin.command: >
+    kubeadm join --token {{ k8s_token }} --discovery-token-ca-cert-hash sha256:{{ k8s_ca_cert_hash }} {{ k8s_master_addr }} 
+  register: join_output
+
+- name: Print the join result
+  ansible.builtin.debug:
+    msg: "{{ join_output.stdout }}"

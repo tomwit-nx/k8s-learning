@@ -1,0 +1,18 @@
+---
+- name: Install Tigera Calico operator
+  ansible.builtin.shell:
+    cmd: "kubectl create -f {{ k8s.cni.calico.tigera_operator }} && touch {{ k8s.ansible }}/tigera.operator"
+    creates: "{{ k8s.ansible }}/tigera.operator"
+
+- name: Install Calico CNI plugins from CRDs
+  ansible.builtin.shell:
+    cmd: "kubectl create -f {{ k8s.cni.calico.calico }} && touch {{ k8s.ansible }}/calico.crd"
+    creates: "{{ k8s.ansible }}/calico.crd"
+
+- name: Download calicoctl to /usr/local/bin
+  ansible.builtin.get_url:
+    url: "{{ k8s.cni.calico.calicoctl }}"
+    dest: "/usr/local/bin/calicoctl"
+    mode: '0744'
+    owner: root
+    group: root

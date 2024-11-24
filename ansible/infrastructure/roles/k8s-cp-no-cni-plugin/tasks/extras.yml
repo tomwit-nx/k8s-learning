@@ -1,0 +1,12 @@
+---
+- name: Install Helm
+  ansible.builtin.shell:
+    cmd: "curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash"
+
+- name: Install ArgoCD CLI
+  ansible.builtin.get_url:
+    url:  https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+    dest: /usr/local/bin/argocd
+    mode: '755'
+    owner: root
+    group: root

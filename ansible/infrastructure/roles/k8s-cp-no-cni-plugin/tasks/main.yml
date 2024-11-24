@@ -1,0 +1,40 @@
+---
+- name: Initialize k8s cluster control plane
+  ansible.builtin.shell:
+    cmd: "kubeadm init --pod-network-cidr={{ k8s.pod_network_cidr }} && touch {{ k8s.ansible }}/control-plane"
+    creates: "{{ k8s.ansible }}/control-plane"
+
+- name: Set KUBECONFIG variable in /root/.bashrc
+  ansible.builtin.lineinfile:
+      path: "/root/.bashrc"
+      line: "export KUBECONFIG=/etc/kubernetes/admin.conf"
+      state: present
+
+- name: Add kubectl autocompletion
+  ansible.builtin.lineinfile:
+    path: /root/.bashrc
+    line: source <(kubectl completion bash)
+
+- name: Retrieve the control plane join token
+  ansible.builtin.shell:
+    cmd: "kubeadm token list | awk '{print $1}'"
+  register: kubeadm_token_list
+  changed_when: false
+
+- name: Print the join token
+  ansible.builtin.debug:
+    msg: "Kubernetes join token: {{ kubeadm_token_list.stdout }}"
+
+- name: Retrieve the Kubernetes CA certificate hash
+  ansible.builtin.shell:
+    cmd: "cat /etc/kubernetes/pki/ca.crt | openssl x509 -pubkey  | openssl rsa -pubin -outform der 2>/dev/null | 
+   openssl dgst -sha256 -hex | sed 's/^.* //'"
+  register: ca_cert_hash
+  changed_when: false
+
+- name: Print the CA cert hash
+  ansible.builtin.debug:
+    msg: "Kubernetes CA certificate hash: {{ ca_cert_hash.stdout }}"
+
+- name: Install extras
+  ansible.builtin.include_tasks: extras.yml

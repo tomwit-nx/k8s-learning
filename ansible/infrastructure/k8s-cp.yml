@@ -1,0 +1,7 @@
+---
+- name: Bootstrap Kubernetes control plane with Calico CNI plugin
+  hosts: all
+  roles:
+    - k8s-common
+    - k8s-cp-no-cni-plugin
+    - k8s-cni-calico

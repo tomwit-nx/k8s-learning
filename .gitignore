@@ -1,0 +1,10 @@
+# Ignore every file and directory beginning with dot
+.*/
+.*
+
+# Except for .gitignore file
+!.gitignore
+!.gitattributes
+!.pre-commit-config.yaml
+!.shellcheckrc
+!.gitkeep
