@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/tomwit-nx/k8s-learning
     targetRevision: HEAD
-    path: cluster-1/core/gitopts-controller
+    path: cluster-1/core/gitops-controller
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
