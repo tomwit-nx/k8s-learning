@@ -7,7 +7,7 @@ spec:
   generators:
   - git:
       repoURL: https://github.com/tomwit-nx/k8s-learning
-      revision: main
+      revision: master
       directories:
       - path: cluster-1/core/*
   template:
@@ -27,7 +27,7 @@ spec:
             maxDuration: 5m
       source:
         repoURL: https://github.com/tomwit-nx/k8s-learning
-        targetRevision: main
+        targetRevision: master
         path: '{{path}}'
       destination:
         server: https://kubernetes.default.svc
