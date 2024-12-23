@@ -1,6 +1,6 @@
 k8s:
   ansible: /root/kubernetes/ansible
-  pod_network_cidr: 192.168.0.0/16
+  pod_network_cidr: 10.244.0.0/16
   cni:
     calico:
       tigera_operator: https://raw.githubusercontent.com/projectcalico/calico/v3.29.1/manifests/tigera-operator.yaml

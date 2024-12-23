@@ -4,9 +4,18 @@
     cmd: "kubectl create -f {{ k8s.cni.calico.tigera_operator }} && touch {{ k8s.ansible }}/tigera.operator"
     creates: "{{ k8s.ansible }}/tigera.operator"
 
-- name: Install Calico CNI plugins from CRDs
+- name: Install Calico CNI plugins from CRDs (1/3)
+  ansible.builtin.get_url:
+    dest: /tmp/calico-custom-resources.yaml
+    url: "{{ k8s.cni.calico.calico }}"
+
+- name: Install Calico CNI plugins from CRDs (2/3)
   ansible.builtin.shell:
-    cmd: "kubectl create -f {{ k8s.cni.calico.calico }} && touch {{ k8s.ansible }}/calico.crd"
+    cmd: "sed -i 's|192.168.0.0/16|{{ k8s.pod_network_cidr }}|g' /tmp/calico-custom-resources.yaml"
+
+- name: Install Calico CNI plugins from CRDs (3/3)
+  ansible.builtin.shell:
+    cmd: "kubectl create -f /tmp/calico-custom-resources.yaml && touch {{ k8s.ansible }}/calico.crd"
     creates: "{{ k8s.ansible }}/calico.crd"
 
 - name: Download calicoctl to /usr/local/bin
